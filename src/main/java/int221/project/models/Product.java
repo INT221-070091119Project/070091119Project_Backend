@@ -1,55 +1,51 @@
 package int221.project.models;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.*;
+import lombok.*;
+import lombok.ToString.Exclude;
 
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-public class Product {
+public class Product implements Serializable{
 	@Id
-	private String proId;
-	private String proName;
-	private double proCost;
-	private String proDescription;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "proid", nullable = false)
+	private int productId;
+	
+	@Column(name = "proname", nullable = false, length = 50)
+	private String productName;
+	
+	@Column(name = "procost", precision = 7, scale = 2)
+	private double productCost;
+	
+	@Column(name = "prodescription", length = 400)
+	private String productDescription;
+	
 	@Basic
-    private java.sql.Date proDate;
-	private String bId;
+	@Column(name = "prodate", length = 400)
+	@JsonFormat(pattern="yyyy-MM-dd")
+    private java.sql.Date productDate;
 	
-	public String getProId() {
-		return proId;
-	}
-	public void setProId(String proId) {
-		this.proId = proId;
-	}
-	public String getProName() {
-		return proName;
-	}
-	public void setProName(String proName) {
-		this.proName = proName;
-	}
-	public double getProCost() {
-		return proCost;
-	}
-	public void setProCost(double proCost) {
-		this.proCost = proCost;
-	}
-	public String getProDescription() {
-		return proDescription;
-	}
-	public void setProDescription(String proDescription) {
-		this.proDescription = proDescription;
-	}
-	public java.sql.Date getProDate() {
-		return proDate;
-	}
-	public void setProDate(java.sql.Date proDate) {
-		this.proDate = proDate;
-	}
-	public String getbId() {
-		return bId;
-	}
-	public void setbId(String bId) {
-		this.bId = bId;
-	}
+	@Column(name = "proimage")
+	private String productImageName;
 	
+	@ManyToOne
+	@JoinColumn(name = "bid", referencedColumnName = "bid")
+	private Brand brand;
+	
+	@OneToMany(mappedBy = "product")
+	private Set<ProductColor> colors = new TreeSet<>();
+
 }

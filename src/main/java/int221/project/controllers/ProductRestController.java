@@ -104,21 +104,6 @@ public class ProductRestController {
 		productRepository.flush();
 	}
 	
-	@GetMapping("/colors")
-	public List<Color> colors() {
-		return colorRepository.findAll();
-	}
-	
-	@GetMapping("/colors/{id}")
-	public Color color(@PathVariable int id) {
-		return colorRepository.findById(id).orElse(null);
-	}
-	
-	@GetMapping("/brands")
-	public List<Brand> brands() {
-		return brandRepository.findAll();
-	}
-	
 	@GetMapping("/productcolors")
 	public List<ProductColor> productColors() {
 		return productColorRepository.findAll();

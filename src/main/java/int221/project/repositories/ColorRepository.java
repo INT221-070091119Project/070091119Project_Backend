@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import int221.project.models.Color;
 
-public interface ColorRepository extends JpaRepository<Color, String>  {
+public interface ColorRepository extends JpaRepository<Color, Integer>  {
 
 }

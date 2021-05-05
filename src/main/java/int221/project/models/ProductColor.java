@@ -1,34 +1,37 @@
 package int221.project.models;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Entity
+@Table(name = "productcolor")
 @JsonIgnoreProperties(value = {"productColorId"})
 public class ProductColor {
 	
-	@Id
-	@Column(name = "pc_id", nullable = false, length = 5)
-	private String productColorId;
+	@EmbeddedId
+	private ProductColorPK productColorId;
 	
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@MapsId("productId")
-    @JoinColumn(name = "proid", referencedColumnName = "proid")
-	@JsonIgnore
+	@JoinColumn(name = "proid")
 	private Product product;
 	
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@MapsId("colorId")
-    @JoinColumn(name = "cid", referencedColumnName = "cid")
+	@JoinColumn(name = "cid")
 	private Color color;
-
 }

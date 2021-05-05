@@ -7,6 +7,8 @@ import lombok.ToString.Exclude;
 
 import javax.persistence.*;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @Getter
 @Setter
 @Entity
-public class Product implements Serializable{
+public class Product implements Serializable,Comparable<Product>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "proid", nullable = false)
@@ -39,13 +41,21 @@ public class Product implements Serializable{
     private java.sql.Date productDate;
 	
 	@Column(name = "proimage")
-	private String productImageName;
+	private String image;
 	
 	@ManyToOne
 	@JoinColumn(name = "bid", referencedColumnName = "bid")
 	private Brand brand;
 	
-	@OneToMany(mappedBy = "product")
-	private Set<ProductColor> colors = new TreeSet<>();
+	@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @JoinTable(name = "productcolor",
+            joinColumns = { @JoinColumn(name = "proid") },
+            inverseJoinColumns = { @JoinColumn(name = "cid") })
+	private List<Color> colors;
+	
+	@Override
+	public int compareTo(Product other) {
+		return this.productId-other.productId;
+	}
 
 }

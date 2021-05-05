@@ -1,5 +1,7 @@
 package int221.project.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,14 +17,23 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @JsonIgnoreProperties(value = {"products"})
-public class Color {
+public class Color implements Comparable<Color> {
 	@Id
-	@Column(name = "cid", nullable = false, length = 5)
-	private String colorId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cid", nullable = false)
+	private int colorId;
 	
 	@Column(name = "cname", nullable = false, length = 10)
 	private String colorName;
 	
-	@OneToMany(mappedBy = "color")
-	private Set<ProductColor> products = new TreeSet<>();
+	@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @JoinTable(name = "productcolor",
+            joinColumns = { @JoinColumn(name = "cid") },
+            inverseJoinColumns = { @JoinColumn(name = "proid") })
+	private List<Product> products;
+	
+	@Override
+	public int compareTo(Color other) {
+		return this.colorId-other.colorId;
+	}
 }

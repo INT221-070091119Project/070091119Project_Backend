@@ -16,6 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "color")
 @JsonIgnoreProperties(value = {"products"})
 public class Color implements Comparable<Color> {
 	@Id

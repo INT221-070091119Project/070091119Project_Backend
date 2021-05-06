@@ -11,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "brand")
 public class Brand {
 	@Id
 	@Column(name = "bid", nullable = false, length = 5)

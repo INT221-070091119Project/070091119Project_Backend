@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 @Getter
 @Setter
 @Entity
+@Table(name = "product")
 public class Product implements Serializable,Comparable<Product>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

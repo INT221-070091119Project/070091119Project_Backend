@@ -2,36 +2,22 @@ package int221.project.controllers;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
-import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import int221.project.models.*;
 import int221.project.repositories.*;
 import int221.project.service.*;
-import net.bytebuddy.implementation.bytecode.Throw;
 
 @RestController
+@CrossOrigin(origins = "https://localhost:8080")
 public class ProductRestController {
 	
 	@Autowired
 	private ProductRepository productRepository;
 	@Autowired
 	private ColorRepository colorRepository;
-	@Autowired
-	private BrandRepository brandRepository;
 	@Autowired
 	private ProductColorRepository productColorRepository;
 	
@@ -102,11 +88,6 @@ public class ProductRestController {
 		p.getColors().clear();
 		productRepository.deleteById(id);
 		productRepository.flush();
-	}
-	
-	@GetMapping("/productcolors")
-	public List<ProductColor> productColors() {
-		return productColorRepository.findAll();
 	}
 	
 }

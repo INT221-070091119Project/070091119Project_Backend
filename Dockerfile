@@ -4,7 +4,6 @@ COPY pom.xml /usr/src/app
 RUN mvn -f usr/src/app/pom.xml clean package
 
 FROM openjdk:11
-ARG JAR_FILE=/usr/src/app/target/*.jar
-COPY ${JAR_FILE} app.jar
+COPY --from=build usr/src/app/target/*.jar usr/app/int221-1.0.0-SNAPSHOT.jar
 EXPOSE 8081
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/usr/app/int221-1.0.0-SNAPSHOT.jar"]

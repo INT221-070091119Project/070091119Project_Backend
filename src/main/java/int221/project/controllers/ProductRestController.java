@@ -3,6 +3,7 @@ package int221.project.controllers;
 import java.nio.file.Path;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +39,7 @@ public class ProductRestController {
 		return fileService.load(name);
 	}
 
-	@PostMapping("")
+	@PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public Product create(@RequestParam(value = "image", required = false) MultipartFile productImage,@RequestPart Product newProduct) throws Exception {
 		if(productRepository.findById(newProduct.getProductId()).orElse(null) != null) {
 			throw new Exception("Product already exist"); 
@@ -55,7 +56,7 @@ public class ProductRestController {
 		return newProduct;
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public Product update(@RequestParam(value = "image", required = false) MultipartFile productImage,@PathVariable int id,@RequestPart Product newProduct) {
 		Product p = productRepository.findById(id).orElse(null);
 		p.setProductCost(newProduct.getProductCost());

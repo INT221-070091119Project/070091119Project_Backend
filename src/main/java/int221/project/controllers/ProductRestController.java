@@ -33,7 +33,7 @@ public class ProductRestController {
 	public Product product(@PathVariable int id) {
 		return productRepository.findById(id).orElse(null);
 	}
-	
+
 	@GetMapping("/image/{name}")
 	public Path image(@PathVariable String name) {
 		return fileService.load(name);
@@ -84,5 +84,6 @@ public class ProductRestController {
 		old.setProductColors(p.getProductColors());
 		addProductColorPk(old);
 	}
+	
 	
 }

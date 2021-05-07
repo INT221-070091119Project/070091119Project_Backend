@@ -7,13 +7,7 @@ import lombok.ToString.Exclude;
 
 import javax.persistence.*;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,7 +19,7 @@ public class Product implements Serializable,Comparable<Product>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "proid", nullable = false)
-	private int productId;
+	private Integer productId;
 	
 	@Column(name = "proname", nullable = false, length = 50)
 	private String productName;
@@ -48,12 +42,15 @@ public class Product implements Serializable,Comparable<Product>{
 	@JoinColumn(name = "bid", referencedColumnName = "bid")
 	private Brand brand;
 	
-	@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
-    @JoinTable(name = "productcolor",
-            joinColumns = { @JoinColumn(name = "proid") },
-            inverseJoinColumns = { @JoinColumn(name = "cid") })
-	private List<Color> colors;
-	
+//	@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+//    @JoinTable(name = "productcolor",
+//            joinColumns = { @JoinColumn(name = "proid") },
+//            inverseJoinColumns = { @JoinColumn(name = "cid") })
+//	private List<Color> colors;
+
+	@OneToMany(mappedBy = "product",fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+	private List<ProductColor> productColors;
+
 	@Override
 	public int compareTo(Product other) {
 		return this.productId-other.productId;

@@ -17,22 +17,21 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "color")
-@JsonIgnoreProperties(value = {"products"})
 public class Color implements Comparable<Color> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "cid", nullable = false)
-	private int colorId;
+	private Integer colorId;
 	
 	@Column(name = "cname", nullable = false, length = 10)
 	private String colorName;
 	
-	@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
-    @JoinTable(name = "productcolor",
-            joinColumns = { @JoinColumn(name = "cid") },
-            inverseJoinColumns = { @JoinColumn(name = "proid") })
-	private List<Product> products;
-	
+//	@ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+//    @JoinTable(name = "productcolor",
+//            joinColumns = { @JoinColumn(name = "cid") },
+//            inverseJoinColumns = { @JoinColumn(name = "proid") })
+//	private List<Product> products;
+
 	@Override
 	public int compareTo(Color other) {
 		return this.colorId-other.colorId;

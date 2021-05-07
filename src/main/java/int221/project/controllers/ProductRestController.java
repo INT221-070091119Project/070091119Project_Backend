@@ -41,54 +41,48 @@ public class ProductRestController {
 
 	@PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public Product create(@RequestParam(value = "image", required = false) MultipartFile productImage,@RequestPart Product newProduct) throws Exception {
-		if(productRepository.findById(newProduct.getProductId()).orElse(null) != null) {
-			throw new Exception("Product already exist"); 
-		}
+
 		if(productImage != null) {
-			fileService.store(productImage);
+			newProduct.setImage(fileService.save(productImage,newProduct.getProductName()));
 		}
-		List<Color> colors = newProduct.getColors();
-		for(Color c : colors){
-			Color color = colorRepository.findById(c.getColorId()).orElse(null);
-			color.getProducts().add(newProduct);
-		}
-		productRepository.save(newProduct);
-		return newProduct;
+		addProductColorPk(newProduct);
+		return productRepository.saveAndFlush(newProduct);
 	}
 	
 	@PutMapping(value = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public Product update(@RequestParam(value = "image", required = false) MultipartFile productImage,@PathVariable int id,@RequestPart Product newProduct) {
 		Product p = productRepository.findById(id).orElse(null);
-		p.setProductCost(newProduct.getProductCost());
-		p.setProductDate(newProduct.getProductDate());
-		p.setProductName(newProduct.getProductName());
-		p.setProductDescription(newProduct.getProductDescription());
-		List<Color> oldColor = p.getColors();
-		for(Color oc : oldColor){
-			Color o = colorRepository.findById(oc.getColorId()).orElse(null);
-			o.getProducts().remove(p);
-		}
-		List<Color> newColor = newProduct.getColors();
-		for(Color nc : newColor){
-			Color n = colorRepository.findById(nc.getColorId()).orElse(null);
-			n.getProducts().add(p);
-		}
+		editProduct(p,newProduct);
 		if(productImage != null) {
 			fileService.delete(p.getImage());
-			p.setImage(newProduct.getImage());
-			fileService.store(productImage);
+			p.setImage(fileService.save(productImage,p.getProductName()));
 		}
-		productRepository.saveAndFlush(p);
-		return newProduct;
+		return productRepository.saveAndFlush(p);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
 		Product p = productRepository.findById(id).orElse(null);
 		fileService.delete(p.getImage());
-		p.getColors().clear();
 		productRepository.deleteById(id);
 		productRepository.flush();
+	}
+	private void addProductColorPk(Product product){
+		for(ProductColor pc : product.getProductColors()){
+			pc.setProductColorId(new ProductColorPK(product.getProductId(),pc.getColor().getColorId()));
+			pc.setProduct(product);
+		}
+	}
+
+	private void editProduct(Product old,Product p){
+		old.setProductCost(p.getProductCost());
+		old.setProductDate(p.getProductDate());
+		old.setProductName(p.getProductName());
+		old.setProductDescription(p.getProductDescription());
+		old.setBrand(p.getBrand());
+		productColorRepository.deleteByProductId(old.getProductId());
+		old.setProductColors(p.getProductColors());
+		addProductColorPk(old);
 	}
 	
 }

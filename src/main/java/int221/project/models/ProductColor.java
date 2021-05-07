@@ -28,6 +28,7 @@ public class ProductColor {
 	@ManyToOne(optional = false)
 	@MapsId("productId")
 	@JoinColumn(name = "proid")
+	@JsonBackReference
 	private Product product;
 	
 	@ManyToOne(optional = false)

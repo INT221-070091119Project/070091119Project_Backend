@@ -119,5 +119,28 @@ public class FileService implements StorageService {
         	throw new StorageException("fail to delete file"+ filename, e);
         }
     }
+    public String save(MultipartFile file,String name){
+        String filename = StringUtils.cleanPath(name+"_"+file.getOriginalFilename());
+        try {
+            if (file.isEmpty()) {
+                throw new StorageException("Failed to store empty file " + filename);
+            }
+            if (filename.contains("..")) {
+                // This is a security check
+                throw new StorageException(
+                        "Cannot store file with relative path outside current directory "
+                                + filename);
+            }
+            try (InputStream inputStream = file.getInputStream()) {
+                Files.copy(inputStream, this.rootLocation.resolve(filename),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
+        catch (IOException e) {
+            throw new StorageException("Failed to store file " + filename, e);
+        }
+
+        return filename;
+    }
 }
 

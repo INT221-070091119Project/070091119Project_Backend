@@ -12,13 +12,11 @@ import int221.project.repositories.*;
 import int221.project.service.*;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080")
 public class ProductRestController {
 	
 	@Autowired
 	private ProductRepository productRepository;
-	@Autowired
-	private ColorRepository colorRepository;
 	@Autowired
 	private ProductColorRepository productColorRepository;
 	
@@ -84,6 +82,6 @@ public class ProductRestController {
 		old.setProductColors(p.getProductColors());
 		addProductColorPk(old);
 	}
-	
+
 	
 }

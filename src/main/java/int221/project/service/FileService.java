@@ -13,13 +13,14 @@ import int221.project.exceptions.FileNotFoundException;
 import int221.project.exceptions.StorageException;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.stream.Stream;
 
 @Service
@@ -142,5 +143,6 @@ public class FileService implements StorageService {
 
         return filename;
     }
+
 }
 

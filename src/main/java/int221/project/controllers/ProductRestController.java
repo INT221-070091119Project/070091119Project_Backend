@@ -1,15 +1,21 @@
 package int221.project.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.nio.file.Path;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import int221.project.models.*;
 import int221.project.repositories.*;
 import int221.project.service.*;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -33,8 +39,10 @@ public class ProductRestController {
 	}
 
 	@GetMapping("/image/{name}")
-	public Path image(@PathVariable String name) {
-		return fileService.load(name);
+	@ResponseBody
+	public ResponseEntity<Resource> getFile(@PathVariable String name) {
+		Resource file = (Resource) fileService.loadAsResource(name);
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(file);
 	}
 
 	@PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

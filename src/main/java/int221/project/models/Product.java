@@ -29,11 +29,11 @@ public class Product implements Serializable,Comparable<Product>{
 	
 	@Column(name = "prodescription", length = 400)
 	private String productDescription;
-	
-	@Basic
+
 	@Column(name = "prodate", length = 400)
+	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern="yyyy-MM-dd")
-    private java.sql.Date productDate;
+    private Date productDate;
 	
 	@Column(name = "proimage")
 	private String image;

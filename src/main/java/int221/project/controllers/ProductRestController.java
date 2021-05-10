@@ -48,7 +48,7 @@ public class ProductRestController {
 	@PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public Product create(@RequestParam(value = "image", required = false) MultipartFile productImage,@RequestPart Product newProduct) throws Exception {
 
-		if(!productImage.isEmpty()) {
+		if(productImage != null) {
 			newProduct.setImage(fileService.save(productImage,newProduct.getProductName()));
 		}
 		addProductColorPk(newProduct);
@@ -56,10 +56,10 @@ public class ProductRestController {
 	}
 	
 	@PutMapping(value = "/edit/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public Product update(@RequestParam(value = "image", required = false) MultipartFile productImage,@PathVariable int id,@RequestPart Product newProduct) {
+	public Product update(@RequestParam(value = "image", required = false) MultipartFile productImage,@RequestPart Product newProduct,@PathVariable int id) {
 		Product p = productRepository.findById(id).orElse(null);
 		editProduct(p,newProduct);
-		if(!productImage.isEmpty()) {
+		if(productImage != null) {
 			fileService.delete(p.getImage());
 			p.setImage(fileService.save(productImage,p.getProductName()));
 		}

@@ -121,7 +121,7 @@ public class FileService implements StorageService {
         }
     }
     public String save(MultipartFile file,String name){
-        String filename = StringUtils.cleanPath(name+"_"+file.getOriginalFilename());
+        String filename = StringUtils.cleanPath(name.replaceAll(" ","_")+"_"+file.getOriginalFilename().replaceAll(" ","_"));
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);

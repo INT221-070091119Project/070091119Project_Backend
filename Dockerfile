@@ -1,9 +1,11 @@
 FROM maven:3.6.0-jdk-11 AS build
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
-RUN mvn -f usr/src/app/pom.xml clean package
+COPY . ./
+RUN mvn clean package
 
 FROM openjdk:11
-COPY --from=build usr/src/app/target/*.jar usr/app/int221-1.0.0-SNAPSHOT.jar
+COPY --from=build target/*.jar ./app.jar
+COPY public/product-images public/product-images 
 EXPOSE 8081
-ENTRYPOINT ["java","-jar","/usr/app/int221-1.0.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","./app.jar"]
+
+

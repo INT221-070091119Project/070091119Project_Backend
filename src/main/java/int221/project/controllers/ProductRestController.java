@@ -18,7 +18,7 @@ import int221.project.service.*;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://40.76.71.12:8080")
 public class ProductRestController {
 	
 	@Autowired
